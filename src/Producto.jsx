@@ -5,6 +5,10 @@ export default function Producto() {
 
     const [productos, cargarProductos] = useState([]);
     const [nombre, setnombre] = useState("");
+    const [precio, setPrecio] = useState("");
+    const [cantidad, setCantidad] = useState(0)
+    const [imagen, setImagen] = useState("")
+    const [descripcion, setDescripcion] = useState("")
 
     useEffect(() => {
         getProductos()
@@ -13,6 +17,12 @@ export default function Producto() {
     async function getProductos() {
         const { data } = await axios.get("http://127.0.0.1:3000/producto")
         cargarProductos(data)
+    }
+
+    async function guardarProducto(){
+        await axios.post("http://127.0.0.1:3000/producto", {nombre, precio, cantidad, imagen, descripcion} )
+        getProductos()
+        
     }
 
 
@@ -24,6 +34,21 @@ export default function Producto() {
             <h1>{ nombre }</h1>
             <label htmlFor="">Ingrese Nombre</label>
             <input type="text" onChange={(e) => setnombre(e.target.value)} />
+            <br />
+            <label htmlFor="">Ingrese Precio</label>
+            <input type="text" onChange={(e) => setPrecio(e.target.value)} />
+            <br />
+            <label htmlFor="">Ingrese Cantidad</label>
+            <input type="text" onChange={(e) => setCantidad(e.target.value)} />
+            <br />
+            <label htmlFor="">Ingrese Imagen</label>
+            <input type="text" onChange={(e) => setImagen(e.target.value)} />
+            <br />
+            <label htmlFor="">Ingrese Descripción</label>
+            <input type="text" onChange={(e) => setDescripcion(e.target.value)} />
+
+            <br />
+            <button onClick={() => guardarProducto()}>Guardar Producto</button>
 
             <table className='table table-striped table-hover'>
                 <thead>
@@ -42,7 +67,9 @@ export default function Producto() {
                             <td>{prod.nombre}</td>
                             <td>{prod.precio}</td>
                             <td>{prod.cantidad}</td>
-                            <td>{prod.Imagen}</td>
+                            <td>
+                                <img src={prod.imagen} alt="" width="100px" />
+                            </td>
                             <td>{prod.descripcion}</td>
                             <td>
                                 <button className='btn btn-warning'>editar</button>
